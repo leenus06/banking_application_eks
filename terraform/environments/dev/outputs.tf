@@ -39,14 +39,14 @@ output "documents_bucket" {
 }
 
 output "route53_zone_id" {
-  value = module.route53.zone_id
+  value = try(module.route53[0].zone_id, null)
 }
 
 # Paste these 4 nameservers into GoDaddy (Domain -> Nameservers).
 output "route53_name_servers" {
-  value = module.route53.name_servers
+  value = try(module.route53[0].name_servers, null)
 }
 
 output "apex_fqdn" {
-  value = module.route53.apex_fqdn
+  value = try(module.route53[0].apex_fqdn, null)
 }
