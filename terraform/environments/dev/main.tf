@@ -51,6 +51,7 @@ module "s3_documents" {
 # DNS: apex hosted zone (+ optional apex ALIAS -> Traefik NLB in stage 2).
 # See docs/aws/05-dns-godaddy.md for the two-stage apply + GoDaddy delegation.
 module "route53" {
+  count  = var.domain_name == "" ? 0 : 1 # skipped when no domain is set
   source = "../../modules/route53"
 
   domain_name        = var.domain_name
