@@ -1,7 +1,7 @@
 variable "region" {
   description = "AWS region."
   type        = string
-  default     = "us-east-1"
+  default     = "ap-south-1" # Mumbai
 }
 
 variable "environment" {
@@ -31,7 +31,7 @@ variable "vpc_cidr" {
 variable "azs" {
   description = "Availability zones."
   type        = list(string)
-  default     = ["us-east-1a", "us-east-1b", "us-east-1c"]
+  default     = ["ap-south-1a", "ap-south-1b", "ap-south-1c"]
 }
 
 variable "public_subnets" {
@@ -55,13 +55,15 @@ variable "single_nat_gateway" {
 variable "cluster_version" {
   description = "Kubernetes version."
   type        = string
-  default     = "1.31"
+  # 1.31 is in paid EXTENDED support (6x control-plane price) and ends Nov 2026.
+  # 1.35 is in standard support until Mar 2027.
+  default     = "1.35"
 }
 
 variable "node_instance_types" {
-  description = "Managed node group instance types. t3.xlarge (4 vCPU/16 GB) fits the full stack (32 app pods + Postgres/Kafka/Redis + kube-prometheus-stack + Loki + Tempo + OTel + Argo CD)."
+  description = "Managed node group instance types. m7i-flex.large (2 vCPU / 8 GB) is Free-plan eligible; 3 nodes (~21 GB allocatable, 29 pods/node) fit the demo stack."
   type        = list(string)
-  default     = ["t3.xlarge"]
+  default     = ["m7i-flex.large"]
 }
 
 variable "node_min_size" {
@@ -71,12 +73,12 @@ variable "node_min_size" {
 
 variable "node_max_size" {
   type    = number
-  default = 6
+  default = 4 # keep low so autoscaling can't burn credits
 }
 
 variable "node_desired_size" {
   type    = number
-  default = 4
+  default = 3
 }
 
 variable "ecr_repository_name" {
@@ -86,9 +88,9 @@ variable "ecr_repository_name" {
 }
 
 variable "domain_name" {
-  description = "Apex domain hosted in Route 53 (delegated from GoDaddy)."
+  description = "Apex domain you OWN (e.g. leenusfelex.in), hosted in Route 53. Leave empty to skip DNS and use the NLB hostname for the demo."
   type        = string
-  default     = "vijaygiduthuri.in"
+  default     = ""
 }
 
 variable "create_apex_record" {
