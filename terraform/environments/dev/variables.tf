@@ -57,7 +57,7 @@ variable "cluster_version" {
   type        = string
   # 1.31 is in paid EXTENDED support (6x control-plane price) and ends Nov 2026.
   # 1.35 is in standard support until Mar 2027.
-  default     = "1.35"
+  default = "1.35"
 }
 
 variable "node_instance_types" {
